@@ -9,7 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
@@ -31,7 +31,7 @@ fun ComposeBottomNavigation() {
     Scaffold(
         bottomBar = {
             BottomBar(navHostController = navController)
-        },
+        }
     ) {
         BottomNavGraph(navController = navController)
     }
@@ -42,7 +42,7 @@ fun BottomBar(navHostController: NavHostController) {
     val screens = listOf(
         BottomBarScreen.Home,
         BottomBarScreen.List,
-        BottomBarScreen.Profile,
+        BottomBarScreen.Profile
     )
 
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
@@ -63,7 +63,7 @@ fun RowScope.AddItem(
     currentDestination: NavDestination?,
     navHostController: NavHostController
 ) {
-    val isSelected by remember {
+    val isSelected by rememberSaveable {
         mutableStateOf(
             currentDestination?.hierarchy?.any { it.route == screen.route } == true
         )
