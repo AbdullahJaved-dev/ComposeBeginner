@@ -2,8 +2,10 @@ package com.example.composebeginner
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -53,6 +55,11 @@ fun ComposeAppBar(mainViewModel: MainViewModel) {
             )
         }
     ) {
+        Column(modifier =Modifier.padding(top = it.calculateTopPadding())) {
+            ComposeLazyColumn(items = mainViewModel.dataItems.value) { p, s ->
+
+            }
+        }
     }
 }
 
@@ -67,7 +74,15 @@ fun MainAppBar(
 ) {
     when (searchWidgetState) {
         SearchWidgetState.CLOSED -> {
-            DefaultAppBar(onSearchTriggered = onSearchTriggered)
+            AnimatedVisibility(
+                visible = true,
+                enter = slideInHorizontally()+ fadeIn(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentSize()
+            ) {
+                DefaultAppBar(onSearchTriggered = onSearchTriggered)
+            }
         }
         SearchWidgetState.OPENED -> {
             SearchAppBar(
@@ -84,7 +99,7 @@ fun MainAppBar(
 @Composable
 fun DefaultAppBar(onSearchTriggered: () -> Unit) {
     TopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
+        colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = Color.Black,
             titleContentColor = Color.White,
             actionIconContentColor = Color.White
@@ -120,8 +135,6 @@ fun SearchAppBar(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp),
-        shadowElevation = 4.dp,
-        tonalElevation = 4.dp,
         color = Color.Black
     ) {
         TextField(

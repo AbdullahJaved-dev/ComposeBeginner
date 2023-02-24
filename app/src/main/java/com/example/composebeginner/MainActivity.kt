@@ -4,27 +4,52 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.composebeginner.shimmereffect.ComposeShimmerEffect
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.compose.rememberNavController
+import com.example.composebeginner.effecthandlers.ComposeEffectHandlers
+import com.example.composebeginner.loadinganimation.PreviewLoadingAnimation
+import com.example.composebeginner.onboarding.ComposeOnBoarding
+import com.example.composebeginner.onboarding.SplashViewModel
 import com.example.composebeginner.ui.theme.ComposeBeginnerTheme
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
 
+    @Inject
+    lateinit var splashViewModel: SplashViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen().setKeepOnScreenCondition {
+            !splashViewModel.isLoading.value
+        }
         setContent {
             ComposeBeginnerTheme {
+                PreviewLoadingAnimation()
+                //val startDestination = splashViewModel.startDestination.value
+                //val navController = rememberNavController()
+                //ComposeOnBoarding(navController, startDestination)
+                //ComposeItemPositionAnimation()
+                //ComposeSystemBarColor()
+                //ComposeAnimatedSplash()
+                //ComposeEffectHandlers()
                 //ComposeBottomNavigation()
-                //ComposeAppBar(mainViewModel)
-                Column {
+                /*Column(modifier = Modifier.fillMaxSize()) {
+                    ComposeAppBar(mainViewModel)
+
+                }*/
+
+                /*Column {
                     repeat(7) {
                         ComposeShimmerEffect()
                     }
-                }
+                }*/
             }
         }
     }
@@ -247,7 +272,7 @@ contentAlignment = Alignment.TopCenter
 @Composable
 fun DefaultPreview() {
     ComposeBeginnerTheme {
-        ComposeButton()
+        ComposeEffectHandlers()
     }
 }
 
